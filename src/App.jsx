@@ -1,6 +1,5 @@
 import { motion } from 'motion/react';
 import { FaGraduationCap, FaMapMarkerAlt } from 'react-icons/fa';
-import logo from './assets/Images/logo.jfif';
 
 export default function App() {
   return (
@@ -12,7 +11,7 @@ export default function App() {
         className="card w-96 bg-white shadow-md border border-slate-100"
       >
         <div className="card-body items-center text-center">
-          <img src={logo} alt="KMS EduCare" className="h-14 w-14 object-contain mb-2" />
+          <img  alt="KMS EduCare" className="h-14 w-14 object-contain mb-2" />
           <h2 className="card-title text-2xl font-bold text-[#0F294A]">
             KMS <span className="text-[#0E8A8C]">EduCare</span>
           </h2>

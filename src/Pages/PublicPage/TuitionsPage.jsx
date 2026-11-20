@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import TuitionCard from "../../components/tuitions/TuitionCard";
-import TuitionFiltersBar from "../../components/tuitions/TuitionFiltersBar";
-import PaginationControls from "../../components/tuitions/PaginationControls";
+import LoadingSpinner from "../../Components/Shared/LoadingSpinner";
+import TuitionCard from "../../Components/Tutions/TuitionCard";
+import TuitionFiltersBar from "../../Components/Tutions/TuitionFiltersBar";
+import PaginationControls from "../../Components/Tutions/PaginationControls";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const PAGE_SIZE = 9;

@@ -1,6 +1,6 @@
 import { MdRestartAlt, MdSearch } from "react-icons/md";
 
-// Reused by the dashboard TuitionFormModal later
+// Reused by Components/Dashboard/TuitionFormModal
 export const CLASS_LEVELS = [
   "Class 1", "Class 2", "Class 3", "Class 4", "Class 5",
   "Class 6", "Class 7", "Class 8", "Class 9", "Class 10",

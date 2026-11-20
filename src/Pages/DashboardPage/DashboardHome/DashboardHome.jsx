@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {
   MdAssignment,
   MdAttachMoney,
@@ -10,11 +10,11 @@ import {
   MdSchool,
   MdGroups,
 } from "react-icons/md";
-import useAuth from "../../hooks/useAuth";
-import useUserRole from "../../hooks/useUserRole";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import StatsCard, { formatMoney } from "../../components/dashboard/StatsCard";
+import useAuth from "../../../Hooks/useAuth";
+import useUserRole from "../../../Hooks/useUserRole";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import StatsCard, { formatMoney } from "../../../Components/Dashboard/StatsCard";
 
 // Which metrics and shortcuts each role sees
 const roleConfig = {

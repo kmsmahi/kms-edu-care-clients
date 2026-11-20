@@ -1,7 +1,7 @@
-import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import useUserRole from "../hooks/useUserRole";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import { Navigate, useLocation } from "react-router";
+import useAuth from "../Hooks/useAuth";
+import useUserRole from "../Hooks/useUserRole";
+import LoadingSpinner from "../Components/Shared/LoadingSpinner";
 
 /**
  * Restricts a route to specific roles, e.g.

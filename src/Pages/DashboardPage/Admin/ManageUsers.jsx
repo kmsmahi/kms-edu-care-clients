@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { MdClose, MdDeleteOutline, MdEdit, MdSearch } from "react-icons/md";
-import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
+import useAuth from "../../../Hooks/useAuth";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
 
 const ROLES = ["student", "tutor", "admin"];
 

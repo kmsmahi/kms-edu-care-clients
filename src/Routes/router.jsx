@@ -9,8 +9,10 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import RoleRoute from "./RoleRoute";
 
-// Public pages
+// Error page
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+
+// Public pages
 import HomePage from "../Pages/PublicPage/HomePage";
 import TuitionsPage from "../Pages/PublicPage/TuitionsPage";
 import TuitionDetailsPage from "../Pages/PublicPage/TuitionDetailsPage";
@@ -22,22 +24,22 @@ import LoginPage from "../Pages/PublicPage/LoginPage";
 import RegisterPage from "../Pages/PublicPage/RegisterPage";
 
 // Dashboard pages
-import DashboardHome from "../pages/dashboard/DashboardHome";
-import ProfileSettings from "../pages/dashboard/shared/ProfileSettings";
-import PaymentCheckout from "../pages/dashboard/shared/PaymentCheckout";
+import DashboardHome from "../Pages/DashboardPage/DashboardHome/DashboardHome";
+import ProfileSettings from "../Pages/DashboardPage/Shared/ProfileSettings";
+import PaymentCheckout from "../Pages/DashboardPage/Shared/PaymentCheckout";
 
-import MyTuitions from "../pages/dashboard/student/MyTuitions";
-import PostTuition from "../pages/dashboard/student/PostTuition";
-import AppliedTutors from "../pages/dashboard/student/AppliedTutors";
-import StudentPayments from "../pages/dashboard/student/StudentPayments";
+import MyTuitions from "../Pages/DashboardPage/Student/MyTuitions";
+import PostTuition from "../Pages/DashboardPage/Student/PostTuition";
+import AppliedTutors from "../Pages/DashboardPage/Student/AppliedTutors";
+import StudentPayments from "../Pages/DashboardPage/Student/StudentPayments";
 
-import MyApplications from "../pages/dashboard/tutor/MyApplications";
-import OngoingTuitions from "../pages/dashboard/tutor/OngoingTuitions";
-import RevenueHistory from "../pages/dashboard/tutor/RevenueHistory";
+import MyApplications from "../Pages/DashboardPage/Tutor/MyApplications";
+import OngoingTuitions from "../Pages/DashboardPage/Tutor/OngoingTuitions";
+import RevenueHistory from "../Pages/DashboardPage/Tutor/RevenueHistory";
 
-import ManageUsers from "../pages/dashboard/admin/ManageUsers";
-import ManageTuitions from "../pages/dashboard/admin/ManageTuitions";
-import ReportsAnalytics from "../pages/dashboard/admin/ReportsAnalytics";
+import ManageUsers from "../Pages/DashboardPage/Admin/ManageUsers";
+import ManageTuitions from "../Pages/DashboardPage/Admin/ManageTuitions";
+import ReportsAnalytics from "../Pages/DashboardPage/Admin/ReportsAnalytics";
 
 // Small helper keeps the route table readable
 const only = (roles, element) => (

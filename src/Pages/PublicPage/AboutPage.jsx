@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { MdFlag, MdRemoveRedEye, MdSecurity, MdSupportAgent, MdVerified } from "react-icons/md";
-import SectionHeading from "../../components/shared/SectionHeading";
+import SectionHeading from "../../Components/Shared/SectionHeading";
 
 const values = [
   {

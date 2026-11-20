@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { MdAccessTime, MdCalendarMonth, MdLocationOn, MdMenuBook, MdSchool } from "react-icons/md";
 
 /**

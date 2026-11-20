@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import {
   MdAttachMoney,
   MdCalendarMonth,
@@ -8,8 +8,8 @@ import {
   MdPerson,
   MdSchool,
 } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
 
 /** Tuitions where the student has paid and this tutor was approved. */
 const OngoingTuitions = () => {

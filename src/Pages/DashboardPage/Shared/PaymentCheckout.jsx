@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { MdArrowBack, MdLock } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import { formatMoney } from "../../../components/dashboard/StatsCard";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import { formatMoney } from "../../../Components/Dashboard/StatsCard";
 
 // Publishable key only. Created once, outside the component.
 const stripeKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;

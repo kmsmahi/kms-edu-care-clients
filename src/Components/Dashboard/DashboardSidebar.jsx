@@ -1,5 +1,6 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { FaGraduationCap } from "react-icons/fa";
 import {
   MdAddCircleOutline,
   MdAssignment,
@@ -16,12 +17,11 @@ import {
   MdSchool,
   MdSettings,
 } from "react-icons/md";
-import useAuth from "../../hooks/useAuth";
-import logo from "../../assets/logo.png";
+import useAuth from "../../Hooks/useAuth";
 
 const overview = [{ label: "Overview", to: "/dashboard", Icon: MdDashboard, end: true }];
 
-// Role-aware navigation (paths match router.jsx)
+// Role-aware navigation (paths match Routes/router.jsx)
 const roleLinks = {
   student: [
     { label: "My Tuitions", to: "/dashboard/my-tuitions", Icon: MdMenuBook },
@@ -72,7 +72,9 @@ const DashboardSidebar = ({ user, role, onNavigate }) => {
     <aside className="flex min-h-full w-72 flex-col bg-navy p-4 text-white">
       {/* Brand */}
       <Link to="/" onClick={onNavigate} className="mb-6 flex items-center gap-2 px-2 pt-2">
-        <img src={logo} alt="KMS EduCare" className="h-9 w-9 rounded-md bg-white object-contain p-1" />
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal text-white">
+          <FaGraduationCap className="h-5 w-5" />
+        </span>
         <span className="text-lg font-extrabold">
           KMS <span className="text-teal">EduCare</span>
         </span>

@@ -1,9 +1,9 @@
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { FaGraduationCap } from "react-icons/fa";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { MdDashboard, MdLogout, MdPersonOutline } from "react-icons/md";
-import useAuth from "../../hooks/useAuth";
-import logo from "../../assets/logo.png";
+import useAuth from "../../Hooks/useAuth";
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -82,8 +82,11 @@ const Navbar = () => {
             </ul>
           </div>
 
+          {/* Brand: icon badge, no image file required */}
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="KMS EduCare logo" className="h-10 w-10 object-contain" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-navy text-white">
+              <FaGraduationCap className="h-5 w-5" />
+            </span>
             <span className="text-xl font-extrabold tracking-tight text-navy">
               KMS <span className="text-teal">EduCare</span>
             </span>

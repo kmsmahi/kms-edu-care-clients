@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { MdSave } from "react-icons/md";
-import useAuth from "../../../hooks/useAuth";
-import useUserRole from "../../../hooks/useUserRole";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
+import useAuth from "../../../Hooks/useAuth";
+import useUserRole from "../../../Hooks/useUserRole";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
 
 /** Update name, phone and photo URL. Email and role are read-only. */
 const ProfileSettings = () => {

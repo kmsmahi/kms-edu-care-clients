@@ -7,7 +7,7 @@ import {
   MdTimeline,
   MdDashboardCustomize,
 } from "react-icons/md";
-import SectionHeading from "../shared/SectionHeading";
+import SectionHeading from "../Shared/SectionHeading";
 
 const features = [
   {

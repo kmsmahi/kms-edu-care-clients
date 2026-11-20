@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router";
 import axios from "axios";
 import { MdArrowBack, MdEventAvailable, MdOutlineWorkHistory, MdSchool } from "react-icons/md";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
+import LoadingSpinner from "../../Components/Shared/LoadingSpinner";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import useUserRole from "../hooks/useUserRole";
-import DashboardSidebar from "../components/dashboard/DashboardSidebar";
-import DashboardTopbar from "../components/dashboard/DashboardTopbar";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import { Outlet } from "react-router";
+import useAuth from "../Hooks/useAuth";
+import useUserRole from "../Hooks/useUserRole";
+import DashboardSidebar from "../Components/Dashboard/DashboardSidebar";
+import DashboardTopbar from "../Components/Dashboard/DashboardTopbar";
+import LoadingSpinner from "../Components/Shared/LoadingSpinner";
 
 /**
  * Separate responsive shell for all dashboard pages (never used for public pages).

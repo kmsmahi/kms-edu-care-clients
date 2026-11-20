@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { MdClose, MdDeleteOutline, MdEdit } from "react-icons/md";
-import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import { StatusBadge } from "../../../components/dashboard/StatsCard";
+import useAuth from "../../../Hooks/useAuth";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import { StatusBadge } from "../../../Components/Dashboard/StatsCard";
 
 /** Edit form for a Pending application. Name and email are read-only. */
 const EditApplicationModal = ({ application, onClose, onSaved }) => {

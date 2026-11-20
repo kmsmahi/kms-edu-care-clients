@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { motion } from "motion/react";
 import { MdOutlineVerified, MdSearch, MdStarRate } from "react-icons/md";
 import { FaChalkboardTeacher, FaUserGraduate } from "react-icons/fa";

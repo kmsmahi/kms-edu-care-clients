@@ -1,6 +1,6 @@
-import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
-import LoadingSpinner from "../components/shared/LoadingSpinner";
+import { Navigate, useLocation } from "react-router";
+import useAuth from "../Hooks/useAuth";
+import LoadingSpinner from "../Components/Shared/LoadingSpinner";
 
 /**
  * Blocks unauthenticated access.

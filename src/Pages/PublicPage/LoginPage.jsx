@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../Hooks/useAuth";
 
 /** Maps Firebase error codes to friendly messages. */
 const authErrorMessage = (code) =>

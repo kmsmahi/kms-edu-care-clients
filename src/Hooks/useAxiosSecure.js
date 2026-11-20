@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import useAuth from "./useAuth";
-import { TOKEN_KEY } from "../context/AuthContext";
+import { TOKEN_KEY } from "../Context/AuthContext";
 
 /**
  * Axios instance that attaches the JWT to every request and logs the user

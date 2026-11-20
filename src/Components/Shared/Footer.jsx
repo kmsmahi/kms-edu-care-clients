@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
+import { Link } from "react-router";
+import { FaFacebookF, FaGraduationCap, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { MdEmail, MdLocationOn, MdPhone } from "react-icons/md";
-import logo from "../../assets/logo.png";
 
 const quickLinks = [
   { label: "Home", to: "/" },
@@ -26,7 +26,9 @@ const Footer = () => {
         {/* About */}
         <div className="lg:col-span-2">
           <Link to="/" className="mb-4 flex items-center gap-2">
-            <img src={logo} alt="KMS EduCare logo" className="h-10 w-10 rounded-md bg-white object-contain p-1" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal text-white">
+              <FaGraduationCap className="h-5 w-5" />
+            </span>
             <span className="text-xl font-extrabold text-white">
               KMS <span className="text-teal">EduCare</span>
             </span>

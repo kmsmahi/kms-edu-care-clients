@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import axios from "axios";
-import SectionHeading from "../shared/SectionHeading";
-import LoadingSpinner from "../shared/LoadingSpinner";
-import TuitionCard from "../tuitions/TuitionCard";
+import SectionHeading from "../Shared/SectionHeading";
+import LoadingSpinner from "../Shared/LoadingSpinner";
+import TuitionCard from "../Tutions/TuitionCard";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 

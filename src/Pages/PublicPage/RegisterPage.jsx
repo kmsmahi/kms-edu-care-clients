@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { MdSchool, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FaChalkboardTeacher } from "react-icons/fa";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../Hooks/useAuth";
 
 const authErrorMessage = (code) =>
   ({

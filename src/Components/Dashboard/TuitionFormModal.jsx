@@ -1,8 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdClose } from "react-icons/md";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { CLASS_LEVELS } from "../tuitions/TuitionFiltersBar";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { CLASS_LEVELS } from "../Tutions/TuitionFiltersBar";
 
 const emptyValues = {
   subject: "",

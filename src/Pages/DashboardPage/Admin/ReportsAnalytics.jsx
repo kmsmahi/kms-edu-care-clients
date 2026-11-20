@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { MdAttachMoney, MdGroups, MdMenuBook, MdReceiptLong } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import StatsCard, { formatMoney } from "../../../components/dashboard/StatsCard";
-import AnalyticsCharts from "../../../components/dashboard/AnalyticsCharts";
-import PaginationControls from "../../../components/tuitions/PaginationControls";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import StatsCard, { formatMoney } from "../../../Components/Dashboard/StatsCard";
+import AnalyticsCharts from "../../../Components/Dashboard/AnalyticsCharts";
+import PaginationControls from "../../../Components/Tutions/PaginationControls";
 
 const PAGE_SIZE = 10;
 

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { MdAttachMoney, MdReceiptLong } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import StatsCard, { formatMoney } from "../../../components/dashboard/StatsCard";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import StatsCard, { formatMoney } from "../../../Components/Dashboard/StatsCard";
 
 /** Total earnings and transaction list for the logged-in tutor. */
 const RevenueHistory = () => {

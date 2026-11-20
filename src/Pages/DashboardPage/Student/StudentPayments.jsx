@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { MdPayments, MdReceiptLong } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import StatsCard, { formatMoney } from "../../../components/dashboard/StatsCard";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import StatsCard, { formatMoney } from "../../../Components/Dashboard/StatsCard";
 
 /** Payment history for the logged-in student. */
 const StudentPayments = () => {

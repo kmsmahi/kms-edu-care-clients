@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { MdSearch } from "react-icons/md";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import TutorCard from "../../components/tutors/TutorCard";
-import PaginationControls from "../../components/tuitions/PaginationControls";
+import LoadingSpinner from "../../Components/Shared/LoadingSpinner";
+import TutorCard from "../../Components/Tutors/TutorCard";
+import PaginationControls from "../../Components/Tutions/PaginationControls";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 const PAGE_SIZE = 8;

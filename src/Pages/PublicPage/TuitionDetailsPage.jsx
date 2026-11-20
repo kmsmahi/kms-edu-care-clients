@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import axios from "axios";
 import {
   MdAccessTime,
@@ -10,10 +10,10 @@ import {
   MdPerson,
   MdSchool,
 } from "react-icons/md";
-import useAuth from "../../hooks/useAuth";
-import useUserRole from "../../hooks/useUserRole";
-import LoadingSpinner from "../../components/shared/LoadingSpinner";
-import ApplyTuitionModal from "../../components/tuitions/ApplyTuitionModal";
+import useAuth from "../../Hooks/useAuth";
+import useUserRole from "../../Hooks/useUserRole";
+import LoadingSpinner from "../../Components/Shared/LoadingSpinner";
+import ApplyTuitionModal from "../../Components/Tutions/ApplyTuitionModal";
 
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 

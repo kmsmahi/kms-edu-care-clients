@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { MdAdd, MdDeleteOutline, MdEdit } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import TuitionFormModal from "../../../components/dashboard/TuitionFormModal";
-import { StatusBadge } from "../../../components/dashboard/StatsCard";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import TuitionFormModal from "../../../Components/Dashboard/TuitionFormModal";
+import { StatusBadge } from "../../../Components/Dashboard/StatsCard";
 
 const MyTuitions = () => {
   const axiosSecure = useAxiosSecure();

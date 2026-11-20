@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import useAuth from "../../../hooks/useAuth";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { TuitionForm } from "../../../components/dashboard/TuitionFormModal";
+import useAuth from "../../../Hooks/useAuth";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { TuitionForm } from "../../../Components/Dashboard/TuitionFormModal";
 
 /** Students create a tuition post. It is saved as "Pending" until an admin approves it. */
 const PostTuition = () => {

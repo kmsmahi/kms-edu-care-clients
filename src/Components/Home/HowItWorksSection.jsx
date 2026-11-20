@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { MdAssignment, MdPeopleAlt, MdPayments } from "react-icons/md";
-import SectionHeading from "../shared/SectionHeading";
+import SectionHeading from "../Shared/SectionHeading";
 
 const steps = [
   {

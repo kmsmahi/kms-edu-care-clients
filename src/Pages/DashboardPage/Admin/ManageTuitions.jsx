@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { MdCheck, MdClose } from "react-icons/md";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import LoadingSpinner from "../../../components/shared/LoadingSpinner";
-import { StatusBadge } from "../../../components/dashboard/StatsCard";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import LoadingSpinner from "../../../Components/Shared/LoadingSpinner";
+import { StatusBadge } from "../../../Components/Dashboard/StatsCard";
 
 const TABS = ["All", "Pending", "Approved", "Rejected"];
 

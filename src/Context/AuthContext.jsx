@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import axios from "axios"; 
+import axios from "axios";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -27,17 +27,27 @@ const AuthProvider = ({ children }) => {
 
   /* ------------------------------ JWT helpers ------------------------------ */
 
-  /** Exchange a verified Firebase user's email for a backend-signed JWT. */
-  const issueToken = async (email) => {
-    const { data } = await axios.post(`${API_URL}/auth/jwt`, { email });
+  /** Exchange the verified Firebase user for a backend JWT (server checks the ID token). */
+  const issueToken = async (firebaseUser) => {
+    const idToken = await firebaseUser.getIdToken();
+    const { data } = await axios.post(`${API_URL}/auth/jwt`, {
+      email: firebaseUser.email,
+      idToken,
+    });
     localStorage.setItem(TOKEN_KEY, data.token);
   };
 
-  /** Create the user document in MongoDB (backend upserts, never overwrites role). */
-  const saveUserToDb = (profile) =>
-    axios.post(`${API_URL}/users`, profile).catch((err) => {
-      console.error("Failed to sync user:", err);
-    });
+  /** Create the user document (backend is insert-only, never overwrites a role). */
+  const saveUserToDb = (profile) => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    return axios
+      .post(`${API_URL}/users`, profile, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      })
+      .catch((err) => {
+        console.error("Failed to sync user:", err);
+      });
+  };
 
   /* ----------------------------- Auth actions ----------------------------- */
   // Each action stores the JWT and sets `user` before resolving, so navigating
@@ -45,28 +55,28 @@ const AuthProvider = ({ children }) => {
 
   const registerUser = async (email, password) => {
     const credential = await createUserWithEmailAndPassword(auth, email, password);
-    await issueToken(credential.user.email);
+    await issueToken(credential.user);
     setUser(credential.user);
     return credential;
   };
 
   const loginUser = async (email, password) => {
     const credential = await signInWithEmailAndPassword(auth, email, password);
-    await issueToken(credential.user.email);
+    await issueToken(credential.user);
     setUser(credential.user);
     return credential;
   };
 
-  /** Google login. New Google users are saved with the default role "student". */
+  /** Google login. Token is issued first so /users can be called with Authorization. */
   const googleLogin = async () => {
     const credential = await signInWithPopup(auth, googleProvider);
+    await issueToken(credential.user);
     await saveUserToDb({
       name: credential.user.displayName,
       email: credential.user.email,
       photoUrl: credential.user.photoURL,
       role: "student",
     });
-    await issueToken(credential.user.email);
     setUser(credential.user);
     return credential;
   };
@@ -91,7 +101,7 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
         if (currentUser?.email) {
-          await issueToken(currentUser.email);
+          await issueToken(currentUser);
         } else {
           localStorage.removeItem(TOKEN_KEY);
         }

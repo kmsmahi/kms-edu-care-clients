@@ -14,7 +14,6 @@ const FIREBASE_ERROR_MESSAGES = {
   "auth/network-request-failed": "Network error. Check your connection.",
 };
 
-/** Maps Firebase or API errors to friendly messages. */
 const authErrorMessage = (error) => {
   if (error?.code && FIREBASE_ERROR_MESSAGES[error.code]) {
     return FIREBASE_ERROR_MESSAGES[error.code];
@@ -38,7 +37,6 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Already signed in -> no need to see the login form
   if (!authLoading && user && !submitting) {
     return <Navigate to={from} replace />;
   }
@@ -63,12 +61,13 @@ const LoginPage = () => {
   const handleGoogle = async () => {
     setSubmitting(true);
     try {
-      await googleLogin();
-      toast.success("Signed in with Google!");
-      navigate(from, { replace: true });
+      const res = await googleLogin();
+      if (res) {
+        toast.success("Signed in with Google!");
+        navigate(from, { replace: true });
+      }
     } catch (error) {
       toast.error(authErrorMessage(error));
-    } finally {
       setSubmitting(false);
     }
   };

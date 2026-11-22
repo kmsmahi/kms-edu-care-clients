@@ -4,23 +4,26 @@ import { useNavigate } from "react-router";
 import useAuth from "./useAuth";
 import { TOKEN_KEY } from "../Context/AuthContext";
 
-/**
- * Axios instance that attaches the JWT to every request and logs the user
- * out on 401/403 responses (expired or invalid token).
- */
+const BASE_URL = String(import.meta.env.VITE_API_BASE_URL || "")
+  .trim()
+  .replace(/\/+$/, "");
+
 const useAxiosSecure = () => {
   const { logoutUser } = useAuth();
   const navigate = useNavigate();
 
   const axiosSecure = useMemo(
-    () => axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL }),
+    () => axios.create({ baseURL: BASE_URL }),
     []
   );
 
   useEffect(() => {
     const requestInterceptor = axiosSecure.interceptors.request.use((config) => {
       const token = localStorage.getItem(TOKEN_KEY);
-      if (token) config.headers.Authorization = `Bearer ${token}`;
+      if (token) {
+        config.headers = config.headers || {};
+        config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
     });
 
@@ -36,7 +39,6 @@ const useAxiosSecure = () => {
       }
     );
 
-    // Eject on cleanup so interceptors never stack up
     return () => {
       axiosSecure.interceptors.request.eject(requestInterceptor);
       axiosSecure.interceptors.response.eject(responseInterceptor);

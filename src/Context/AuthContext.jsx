@@ -1,9 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import {
   createUserWithEmailAndPassword,
+  getRedirectResult,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
   onAuthStateChanged,
   signOut,
   updateProfile,
@@ -19,23 +21,27 @@ const API_URL = String(import.meta.env.VITE_API_BASE_URL || "")
   .trim()
   .replace(/\/+$/, "");
 
+const isMobileViewport = () => {
+  if (typeof window === "undefined") return false;
+  return (
+    window.innerWidth < 768 ||
+    /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || "")
+  );
+};
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  // True only until Firebase reports the initial auth state and the JWT is ready.
-  // PrivateRoute waits on this, so a page reload never redirects to /login.
   const [authLoading, setAuthLoading] = useState(true);
-  // Bumped after profile updates so consumers re-render with fresh values
   const [, setProfileTick] = useState(0);
 
   /* ------------------------------ JWT helpers ------------------------------ */
 
-  /** Exchange the verified Firebase user for a backend JWT (server checks the ID token). */
-  const issueToken = async (firebaseUser) => {
+  const issueToken = useCallback(async (firebaseUser) => {
     if (!firebaseUser) return null;
     if (!API_URL) {
       throw new Error("VITE_API_BASE_URL is not configured");
     }
-    const idToken = await firebaseUser.getIdToken();
+    const idToken = await firebaseUser.getIdToken(true);
     const { data } = await axios.post(`${API_URL}/auth/jwt`, {
       email: String(firebaseUser.email || "").trim().toLowerCase(),
       idToken,
@@ -44,13 +50,9 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem(TOKEN_KEY, data.token);
     }
     return data;
-  };
+  }, []);
 
-  /**
-   * Create the user document (backend is insert-only, never overwrites an existing role).
-   * Throws on request failure so callers like RegisterPage know if saving failed.
-   */
-  const saveUserToDb = async (profile) => {
+  const saveUserToDb = useCallback(async (profile) => {
     if (!API_URL) {
       throw new Error("VITE_API_BASE_URL is not configured");
     }
@@ -63,69 +65,111 @@ const AuthProvider = ({ children }) => {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     return data;
-  };
+  }, []);
 
   /* ----------------------------- Auth actions ----------------------------- */
-  // Each action stores the JWT and sets `user` before resolving, so navigating
-  // to a private route right after login can never race the auth listener.
 
-  const registerUser = async (email, password) => {
-    const credential = await createUserWithEmailAndPassword(auth, email, password);
-    await issueToken(credential.user);
-    setUser(credential.user);
-    return credential;
-  };
+  const registerUser = useCallback(
+    async (email, password) => {
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await issueToken(credential.user);
+      setUser(credential.user);
+      return credential;
+    },
+    [issueToken]
+  );
 
-  const loginUser = async (email, password) => {
-    const credential = await signInWithEmailAndPassword(auth, email, password);
-    await issueToken(credential.user);
-    await saveUserToDb({
-      email: credential.user.email,
-      name: credential.user.displayName || "",
-      photoUrl: credential.user.photoURL || "",
-      role: "student",
-    }).catch((err) => {
-      console.error("Failed to sync user on login:", err);
-    });
-    setUser(credential.user);
-    return credential;
-  };
+  const loginUser = useCallback(
+    async (email, password) => {
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      await issueToken(credential.user);
+      await saveUserToDb({
+        email: credential.user.email,
+        name: credential.user.displayName || "",
+        photoUrl: credential.user.photoURL || "",
+        role: "student",
+      }).catch((err) => {
+        console.error("Failed to sync user on login:", err);
+      });
+      setUser(credential.user);
+      return credential;
+    },
+    [issueToken, saveUserToDb]
+  );
 
-  /** Google login. Token is issued first so /users can be called with Authorization. */
-  const googleLogin = async () => {
-    const credential = await signInWithPopup(auth, googleProvider);
-    await issueToken(credential.user);
-    await saveUserToDb({
-      name: credential.user.displayName || "",
-      email: credential.user.email,
-      photoUrl: credential.user.photoURL || "",
-      role: "student",
-    }).catch((err) => {
-      console.error("Failed to sync Google user:", err);
-    });
-    setUser(credential.user);
-    return credential;
-  };
+  const googleLogin = useCallback(async () => {
+    if (isMobileViewport()) {
+      await signInWithRedirect(auth, googleProvider);
+      return null;
+    }
 
-  const updateUserProfile = async (name, photoUrl) => {
+    try {
+      const credential = await signInWithPopup(auth, googleProvider);
+      await issueToken(credential.user);
+      await saveUserToDb({
+        name: credential.user.displayName || "",
+        email: credential.user.email,
+        photoUrl: credential.user.photoURL || "",
+        role: "student",
+      }).catch((err) => {
+        console.error("Failed to sync Google user:", err);
+      });
+      setUser(credential.user);
+      return credential;
+    } catch (err) {
+      if (
+        err?.code === "auth/popup-blocked" ||
+        err?.code === "auth/cancelled-popup-request"
+      ) {
+        await signInWithRedirect(auth, googleProvider);
+        return null;
+      }
+      throw err;
+    }
+  }, [issueToken, saveUserToDb]);
+
+  const updateUserProfile = useCallback(async (name, photoUrl) => {
     if (!auth.currentUser) return;
     await updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: photoUrl,
     });
-    // auth.currentUser is mutated in place; bump state to re-render consumers
     setProfileTick((tick) => tick + 1);
-  };
+  }, []);
 
-  const logoutUser = () => {
+  const logoutUser = useCallback(() => {
     localStorage.removeItem(TOKEN_KEY);
     return signOut(auth);
-  };
+  }, []);
 
-  /* --------------------- Observe auth state (reload persistence) --------------------- */
+  /* ---------------- Observe auth state & mobile redirect result -------------- */
 
   useEffect(() => {
+    let active = true;
+
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (!active || !result?.user) return;
+        await issueToken(result.user);
+        await saveUserToDb({
+          name: result.user.displayName || "",
+          email: result.user.email,
+          photoUrl: result.user.photoURL || "",
+          role: "student",
+        }).catch((err) => {
+          console.error("Failed to sync redirect Google user:", err);
+        });
+      })
+      .catch((err) => {
+        console.error("Google redirect error:", err);
+      });
+
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (!active) return;
       try {
         if (currentUser?.email) {
           await issueToken(currentUser);
@@ -134,15 +178,19 @@ const AuthProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("JWT fetch failed:", error);
-        localStorage.removeItem(TOKEN_KEY);
       } finally {
-        setUser(currentUser);
-        setAuthLoading(false);
+        if (active) {
+          setUser(currentUser);
+          setAuthLoading(false);
+        }
       }
     });
 
-    return () => unsubscribe();
-  }, []);
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [issueToken, saveUserToDb]);
 
   const authInfo = {
     user,

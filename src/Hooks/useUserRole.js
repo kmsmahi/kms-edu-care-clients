@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 import useAuth from "./useAuth";
 import useAxiosSecure from "./useAxiosSecure";
+import { TOKEN_KEY } from "../Context/AuthContext";
 
-/**
- * Fetches the signed-in user's role ("student" | "tutor" | "admin") from the API.
- * Returns { role, roleLoading } so guards can wait before deciding.
- */
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const useUserRole = () => {
-  const { user, authLoading, saveUserToDb } = useAuth();
+  const { user, authLoading, saveUserToDb, issueToken } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [role, setRole] = useState(null);
   const [roleLoading, setRoleLoading] = useState(true);
 
-  useEffect(() => {
-    if (authLoading) return; // wait for Firebase & initial JWT to settle
+  const userEmail = user?.email ? String(user.email).trim().toLowerCase() : "";
+  const displayName = user?.displayName || "";
+  const photoURL = user?.photoURL || "";
 
-    if (!user?.email) {
+  useEffect(() => {
+    if (authLoading) return;
+
+    if (!userEmail) {
       setRole(null);
       setRoleLoading(false);
       return;
@@ -26,31 +29,36 @@ const useUserRole = () => {
 
     const fetchRole = async () => {
       try {
+        // Wait briefly if token hasn't hit localStorage yet on mobile
+        if (!localStorage.getItem(TOKEN_KEY) && typeof issueToken === "function" && user) {
+          await issueToken(user).catch(() => {});
+          await sleep(120);
+        }
+
         const { data } = await axiosSecure.get(
-          `/users/role/${encodeURIComponent(user.email)}`
+          `/users/role/${encodeURIComponent(userEmail)}`
         );
         if (!cancelled) {
           setRole(data?.role || "student");
         }
       } catch (err) {
-        // If the user hasn't been inserted into MongoDB yet (404), sync once and retry
         if (err?.response?.status === 404 && typeof saveUserToDb === "function") {
           try {
             await saveUserToDb({
-              email: user.email,
-              name: user.displayName || "",
-              photoUrl: user.photoURL || "",
+              email: userEmail,
+              name: displayName,
+              photoUrl: photoURL,
               role: "student",
             });
             const { data } = await axiosSecure.get(
-              `/users/role/${encodeURIComponent(user.email)}`
+              `/users/role/${encodeURIComponent(userEmail)}`
             );
             if (!cancelled) {
               setRole(data?.role || "student");
               return;
             }
           } catch {
-            // fall through to null
+            // fall through
           }
         }
 
@@ -69,7 +77,7 @@ const useUserRole = () => {
     return () => {
       cancelled = true;
     };
-  }, [user?.email, user?.displayName, user?.photoURL, authLoading, axiosSecure, saveUserToDb]);
+  }, [userEmail, displayName, photoURL, authLoading, axiosSecure, saveUserToDb, issueToken, user]);
 
   return { role, roleLoading };
 };

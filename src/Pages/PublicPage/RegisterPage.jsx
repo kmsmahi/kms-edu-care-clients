@@ -6,14 +6,26 @@ import { MdSchool, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import useAuth from "../../Hooks/useAuth";
 
-const authErrorMessage = (code) =>
-  ({
-    "auth/email-already-in-use": "An account with this email already exists.",
-    "auth/weak-password": "Password is too weak.",
-    "auth/invalid-email": "Please enter a valid email address.",
-    "auth/popup-closed-by-user": "The sign-in window was closed.",
-    "auth/network-request-failed": "Network error. Check your connection.",
-  })[code] || "Something went wrong. Please try again.";
+const FIREBASE_ERROR_MESSAGES = {
+  "auth/email-already-in-use": "An account with this email already exists.",
+  "auth/weak-password": "Password is too weak.",
+  "auth/invalid-email": "Please enter a valid email address.",
+  "auth/popup-closed-by-user": "The sign-in window was closed.",
+  "auth/network-request-failed": "Network error. Check your connection.",
+};
+
+const getErrorMessage = (error) => {
+  if (error?.code && FIREBASE_ERROR_MESSAGES[error.code]) {
+    return FIREBASE_ERROR_MESSAGES[error.code];
+  }
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+  if (typeof error?.message === "string" && error.message.trim()) {
+    return error.message;
+  }
+  return "Something went wrong. Please try again.";
+};
 
 const roles = [
   { value: "student", label: "Student", hint: "Post tuitions", Icon: MdSchool },
@@ -21,8 +33,15 @@ const roles = [
 ];
 
 const RegisterPage = () => {
-  const { user, authLoading, registerUser, updateUserProfile, saveUserToDb, googleLogin } =
-    useAuth();
+  const {
+    user,
+    authLoading,
+    registerUser,
+    updateUserProfile,
+    saveUserToDb,
+    issueToken,
+    googleLogin,
+  } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -35,7 +54,9 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  if (!authLoading && user && !submitting) return <Navigate to="/dashboard" replace />;
+  if (!authLoading && user && !submitting) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -60,23 +81,32 @@ const RegisterPage = () => {
     setSubmitting(true);
     try {
       const name = form.name.trim();
-      const email = form.email.trim();
+      const email = form.email.trim().toLowerCase();
+      const phone = form.phone.trim();
+      const selectedRole = form.role === "tutor" ? "tutor" : "student";
 
-      await registerUser(email, form.password);
+      // 1. Create Firebase user & fetch JWT (does NOT insert "student" prematurely)
+      const credential = await registerUser(email, form.password);
+
+      // 2. Update Firebase displayName
       await updateUserProfile(name, "");
-      // Save profile (including phone + role) to MongoDB through the API
+
+      // 3. Insert user into MongoDB with the exact chosen role ("student" or "tutor")
       await saveUserToDb({
         name,
         email,
-        phone: form.phone.trim(),
-        role: form.role,
+        phone,
+        role: selectedRole,
         photoUrl: "",
       });
 
-      toast.success("Account created successfully!");
+      // 4. Refresh JWT so the token payload reflects the newly persisted role
+      await issueToken(credential.user);
+
+      toast.success(`Account created as ${selectedRole}!`);
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      toast.error(authErrorMessage(error.code));
+      toast.error(getErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
@@ -89,7 +119,7 @@ const RegisterPage = () => {
       toast.success("Signed in with Google!");
       navigate("/dashboard", { replace: true });
     } catch (error) {
-      toast.error(authErrorMessage(error.code));
+      toast.error(getErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
@@ -200,13 +230,21 @@ const RegisterPage = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <MdVisibilityOff className="h-5 w-5" /> : <MdVisibility className="h-5 w-5" />}
+                {showPassword ? (
+                  <MdVisibilityOff className="h-5 w-5" />
+                ) : (
+                  <MdVisibility className="h-5 w-5" />
+                )}
               </button>
             </div>
           </label>
 
           <button type="submit" disabled={submitting} className="btn-brand h-12 w-full">
-            {submitting ? <span className="loading loading-spinner loading-sm" /> : "Create Account"}
+            {submitting ? (
+              <span className="loading loading-spinner loading-sm" />
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
 

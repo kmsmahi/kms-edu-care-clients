@@ -5,16 +5,28 @@ import { FcGoogle } from "react-icons/fc";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import useAuth from "../../Hooks/useAuth";
 
-/** Maps Firebase error codes to friendly messages. */
-const authErrorMessage = (code) =>
-  ({
-    "auth/invalid-credential": "Invalid email or password.",
-    "auth/user-not-found": "No account found with this email.",
-    "auth/wrong-password": "Incorrect password.",
-    "auth/too-many-requests": "Too many attempts. Please try again later.",
-    "auth/popup-closed-by-user": "The sign-in window was closed.",
-    "auth/network-request-failed": "Network error. Check your connection.",
-  })[code] || "Something went wrong. Please try again.";
+const FIREBASE_ERROR_MESSAGES = {
+  "auth/invalid-credential": "Invalid email or password.",
+  "auth/user-not-found": "No account found with this email.",
+  "auth/wrong-password": "Incorrect password.",
+  "auth/too-many-requests": "Too many attempts. Please try again later.",
+  "auth/popup-closed-by-user": "The sign-in window was closed.",
+  "auth/network-request-failed": "Network error. Check your connection.",
+};
+
+/** Maps Firebase or API errors to friendly messages. */
+const authErrorMessage = (error) => {
+  if (error?.code && FIREBASE_ERROR_MESSAGES[error.code]) {
+    return FIREBASE_ERROR_MESSAGES[error.code];
+  }
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+  if (typeof error?.message === "string" && error.message.trim()) {
+    return error.message;
+  }
+  return "Something went wrong. Please try again.";
+};
 
 const LoginPage = () => {
   const { user, authLoading, loginUser, googleLogin } = useAuth();
@@ -26,8 +38,10 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
-  // Already signed in → no need to see the login form
-  if (!authLoading && user) return <Navigate to={from} replace />;
+  // Already signed in -> no need to see the login form
+  if (!authLoading && user && !submitting) {
+    return <Navigate to={from} replace />;
+  }
 
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,11 +50,11 @@ const LoginPage = () => {
     e.preventDefault();
     setSubmitting(true);
     try {
-      await loginUser(form.email.trim(), form.password);
+      await loginUser(form.email.trim().toLowerCase(), form.password);
       toast.success("Welcome back!");
       navigate(from, { replace: true });
     } catch (error) {
-      toast.error(authErrorMessage(error.code));
+      toast.error(authErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
@@ -53,7 +67,7 @@ const LoginPage = () => {
       toast.success("Signed in with Google!");
       navigate(from, { replace: true });
     } catch (error) {
-      toast.error(authErrorMessage(error.code));
+      toast.error(authErrorMessage(error));
     } finally {
       setSubmitting(false);
     }
@@ -99,7 +113,11 @@ const LoginPage = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <MdVisibilityOff className="h-5 w-5" /> : <MdVisibility className="h-5 w-5" />}
+                {showPassword ? (
+                  <MdVisibilityOff className="h-5 w-5" />
+                ) : (
+                  <MdVisibility className="h-5 w-5" />
+                )}
               </button>
             </div>
           </label>

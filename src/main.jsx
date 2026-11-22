@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router";
 import { Toaster } from "react-hot-toast";
 
 import "./index.css";
-import AuthProvider from "./context/AuthContext";
+import AuthProvider from "./Context/AuthContext";
 import router from "./Routes/router";
 
 createRoot(document.getElementById("root")).render(

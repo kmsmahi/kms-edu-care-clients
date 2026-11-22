@@ -1,16 +1,59 @@
-# React + Vite
+# 🎓 KMS EduCare — Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend web application for **KMS EduCare**, a full-stack tuition management and tutor-hiring platform built with React, Vite, Tailwind CSS, DaisyUI, Firebase Authentication, Axios, and Stripe.
 
-Currently, two official plugins are available:
+- **Live Client URL:** `[LIVE_CLIENT_URL]`
+- **Live API Base URL:** `[LIVE_API_BASE_URL]`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 📌 Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The client application provides role-based workflows for:
 
-## Expanding the ESLint configuration
+- **Students:** Register/log in, post and edit tuition requirements, track tuition approval status (`Pending` / `Approved` / `Rejected`), review tutor applications, complete Stripe checkout to hire a tutor, and view payment history.
+- **Tutors:** Register/log in, browse approved tuitions, apply for open tuitions, track application statuses (`Pending` / `Approved` / `Rejected`), and view ongoing tuitions and revenue records.
+- **Admins & Protected Owner (`salauddinmahi2002@gmail.com`):** Moderate tuition posts, manage users and roles (with owner account protection and owner-restricted admin role assignment), and view platform activity, payments, and analytics.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧰 Tech Stack
+
+- **UI & Routing:** React, Vite, React Router, Tailwind CSS, DaisyUI
+- **Authentication:** Firebase Authentication (`browserLocalPersistence`, email/password, and Google sign-in with popup + redirect fallback/handling)
+- **API & State:** Axios (`useAxiosSecure` with JWT bearer header), Context API (`AuthContext`), custom hooks (`useAuth`, `useUserRole`)
+- **Payments:** Stripe (`@stripe/react-stripe-js` / `@stripe/stripe-js`)
+
+---
+
+## 📁 Project Structure
+
+```text
+kms-educare-client/
+├── public/
+├── src/
+│   ├── Config/
+│   │   ├── firebase.config.js
+│   │   └── api.js
+│   ├── Context/
+│   │   └── AuthContext.jsx
+│   ├── Hooks/
+│   │   ├── useAuth.js
+│   │   ├── useUserRole.js
+│   │   └── useAxiosSecure.js
+│   ├── Components/
+│   ├── Pages/
+│   ├── Layouts/
+│   │   ├── MainLayout.jsx
+│   │   └── DashboardLayout.jsx
+│   ├── Routes/
+│   │   └── Router.jsx
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+├── .env.example
+├── .gitignore
+├── index.html
+├── package.json
+├── vite.config.js
+└── README.md

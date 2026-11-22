@@ -2,8 +2,8 @@
 
 Frontend web application for **KMS EduCare**, a full-stack tuition management and tutor-hiring platform built with React, Vite, Tailwind CSS, DaisyUI, Firebase Authentication, Axios, and Stripe.
 
-- **Live Client URL:** `[LIVE_CLIENT_URL]`
-- **Live API Base URL:** `[LIVE_API_BASE_URL]`
+- **Live Client URL:** `[https://kms-edu-care.web.app/]`
+
 
 ---
 
